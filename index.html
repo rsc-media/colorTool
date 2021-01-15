@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Color Tool rev 2 - Prototyping stage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<header>
+  <h1>Rio Salado College Color Tool</h1>
+</header>
+<main class="paneWrapper">
+  <div class="tools pane">
+    <input type="checkbox" id="pane-tools" checked>
+    <div class="header">
+      <label class="title" for="pane-tools">
+        <i class="fas fa-angle-right"></i>
+        <i class="fas fa-swatchbook"></i> Color Selection Tools
+      </label>
+    </div>
+    <div class="content">
+      <div class="tabs">
+        <span class="tab">
+          <input type="radio" id="tab-rgb" name="tab-group-1" checked>
+          <label for="tab-rgb">RGB</label>
+        </span>
+        <span class="tab">
+          <input type="radio" id="tab-hsl" name="tab-group-1">
+          <label for="tab-hsl">HSL</label>
+        </span>
+        <span class="tab">
+          <input type="radio" id="tab-cmyk" name="tab-group-1">
+          <label for="tab-cmyk">CMYK</label>
+        </span>
+        <span class="tab">
+          <input type="radio" id="tab-image" name="tab-group-1">
+          <label for="tab-image">From Image</label>
+        </span>
+      </div>
+      <div class="tab-content" data-tab="tab-rgb">
+        <div class="grid">
+          <label for="red">Red</label>
+          <div class="inputWrapper">
+            <input id="red" type="number" min="0" max="255" title="Red: 0 - 255" />
+          </div>
+          <div class="colorBar">
+            <input id="redCB" type="range" min="0" max="255" title="Red: 0 - 255" />
+          </div>
+          <label for="green">Green</label>
+          <div class="inputWrapper">
+            <input id="green" type="number" min="0" max="255" title="Green: 0 - 255" />
+          </div>
+          <div class="colorBar">
+            <input id="greenCB" type="range" min="0" max="255" title="Green: 0 - 255" >
+          </div>
+          <label for="blue">Blue</label>
+          <div class="inputWrapper">
+            <input id="blue" type="number" min="0" max="255" title="Blue: 0 - 255" />
+          </div>
+          <div class="colorBar">
+            <input id="blueCB" type="range" min="0" max="255" title="Blue: 0 - 255" >
+          </div>
+          <label for="alpha">Opacity</label>
+          <div class="inputWrapper symbol">
+            <input id="alpha" type="number" min="0" max="100" title="Opacity: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="alphaCB" type="range" min="0" max="100" title="Opacity: 0 - 100">
+          </div>
+          <label for="hex">Hex</label>
+          <div class="inputWrapper">
+            <input id="hex" title="Hex: #rrbbgg" />
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" data-tab="tab-hsl">
+        <div class="grid">
+          <label for="hue">Hue</label>
+          <div class="inputWrapper">
+            <input id="hue" type="number" min="0" max="360" title="Hue: 0 - 360 Deg" />
+          </div>
+          <div class="colorBar">
+            <input id="hueCB" type="range" min="0" max="360" title="Hue: 0 - 360 Deg" >
+          </div>
+          <label for="sat">Saturation</label>
+          <div class="inputWrapper symbol">
+            <input id="sat" type="number" min="0" max="100" title="Saturation: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="satCB" type="range" min="0" max="100" title="Saturation: 0 - 100" />
+          </div>
+          <label for="lum">Luminance</label>
+          <div class="inputWrapper symbol">
+            <input id="lum" type="number" min="0" max="100" title="Luminance: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="lumCB" type="range" min="0" max="100" title="Luminance: 0 - 100" />
+          </div>
+          <label for="alpha2">Opacity</label>
+          <div class="inputWrapper symbol">
+            <input id="alpha2" type="number" min="0" max="100" title="Opacity: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="alpha2CB" type="range" min="0" max="100" title="Opacity: 0 - 100" >
+          </div>
+          <label for="hex2">Hex</label>
+          <div class="inputWrapper">
+            <input id="hex2" title="Hex: #rrbbgg" />
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" data-tab="tab-cmyk">
+        <div class="grid">
+          <label for="cyn">Cyan</label>
+          <div class="inputWrapper symbol">
+            <input id="cyn" type="number" min="0" max="100" title="Cyan: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="cynCB" type="range" min="0" max="100" title="Cyan: 0 - 100" />
+          </div>
+          <label for="mag">Magenta</label>
+          <div class="inputWrapper symbol">
+            <input id="mag" type="number" min="0" max="100" title="Magenta: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="magCB" type="range" min="0" max="100" title="Magenta: 0 - 100" />
+          </div>
+          <label for="yel">Yellow</label>
+          <div class="inputWrapper symbol">
+            <input id="yel" type="number" min="0" max="100" title="Yellow: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="yelCB" type="range" min="0" max="100" title="Yellow: 0 - 100" />
+          </div>
+          <label for="blk">Black</label>
+          <div class="inputWrapper symbol">
+            <input id="blk" type="number" min="0" max="100" title="Black: 0 - 100" /> %
+          </div>
+          <div class="colorBar">
+            <input id="blkCB" type="range" min="0" max="100" title="Black: 0 - 100" />
+          </div>
+          <label for="hex3">Hex</label>
+          <div class="inputWrapper">
+            <input id="hex3" title="Hex: #rrbbgg" />
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" data-tab="tab-image">
+        <div id="image-content">
+          <div action="/image-upload" class="dropzone" id="dropzone" ondrop="handleDrop(event);" ondragover="handleDragover(event);" ondragleave="handleDragleave(event);">
+            <div class="message"><span>
+              Drop an image file here to get colors from it or<br/>
+              <input type="file" accept="image/*">
+            </span></div>
+            <div class="upIcon"><i class="fas fa-upload fa-5x"></i></div>
+            <div class="thumbnail">
+              <span>Click on the image or on a color to add colors to the palette.</span>
+              <span class="flex">
+                <canvas src=""></canvas>
+                <span id="eyedropper">&nbsp;</span>
+                <span class="details" id="thumbnailDetails"></span>
+              </span>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <div class="palette pane">
+    <input type="checkbox" id="pane-palette" checked>
+    <h2 class="header">
+      <label class="title" for="pane-palette">
+        <i class="fas fa-angle-right"></i>
+        <i class="fas fa-palette"></i> Palette
+      </label>
+    </h2>
+    <div class="content">
+      <span id="current">
+        <label for="currentSwatch">Current:</label><br/>
+        <div class="current swatch" id="currentSwatch">
+          <div class="fill">&nbsp;</div>
+        </div>
+      </span>
+      <span id="colors"><label for="palette">Palette</label>
+        <span class="palette" id="palette">
+          <!-- 
+          <div class="swatch">
+            <div class="fill">&nbsp;</div>
+          </div>
+           -->       
+          <button id="addToPalette" title="Add color" onclick="palette.addSwatch()">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button id="removeFromPalette" title="Remove currently selected color" onclick="palette.removeSwatch()">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </span>
+      </span>
+
+      <span id="nearest"></span>
+      <div id="conversions">
+        <h3>Conversions</h3>
+        <span>
+          <label for="alphaEnabled">Alpha Enabled</label>
+          <input type="checkbox" id="alphaEnabled">
+        </span>
+        <div id="conversions-output"></div>
+      </div>
+    </div>
+  </div> 
+  <div class="theme pane">
+    <input type="checkbox" id="pane-theme" checked>
+    <div class="header">
+      <label class="title" for="pane-theme">
+        <i class="fas fa-angle-right"></i>
+        <i class="far fa-file-code"></i> Theme Generator
+      </label>
+    </div>
+    <div class="content" id="outputs-theme">
+      <div class="themeWrapper">
+        <div>
+        <div id="themeValues">
+          <label for="foregroundSwatch">Foreground:</label>
+          <div class="swatch" id="foregroundSwatch">
+            <div class="fill">&nbsp;</div>
+          </div>
+          <label for="backgroundSwatch">Background:</label>
+          <div class="swatch" id="backgroundSwatch">
+            <div class="fill">&nbsp;</div>
+          </div>
+          <label for="accent1Swatch">Accent 1:</label>
+          <div class="swatch" id="accent1Swatch">
+            <div class="fill">&nbsp;</div>
+          </div>
+          <label for="accent2Swatch">Accent 2:</label>
+          <div class="swatch" id="accent2Swatch">
+            <div class="fill">&nbsp;</div>
+          </div>
+        </div>
+        </div>
+        <div id="contrast">
+          <table id="contrastTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Foreground vs Background</th>
+                <th>Foreground vs Accent 1</th>
+                <th>Foreground vs Accent 2</th>
+                <th>Accent 1 vs Background</th>
+                <th>Accent 2 vs Background</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Contrast</th>
+                <td>
+                  2.51:1
+                </td>
+                <td>
+                  2.51:1
+                </td>
+                <td>
+                  2.51:1
+                </td>
+                <td>
+                  2.51:1
+                </td>
+                <td>
+                  2.51:1
+                </td>
+              </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th colspan="6">Normal Text</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>AA - 4.5:1</th>
+                <td id="c1ntAA">
+                  Fail
+                </td>
+                <td id="c2ntAA">
+                  Fail
+                </td>
+                <td id="c3ntAA">
+                  Fail
+                </td>
+                <td id="c4ntAA">
+                  Fail
+                </td>
+                <td id="c5ntAA">
+                  Fail
+                </td>
+              </tr>
+              <tr>
+                <th>AAA - 7:1</th>
+                <td id="c1ntAAA">
+                  Fail
+                </td>
+                <td id="c2ntAAA">
+                  Fail
+                </td>
+                <td id="c3ntAAA">
+                  Fail
+                </td>
+                <td id="c4ntAAA">
+                  Fail
+                </td>
+                <td id="c5ntAAA">
+                  Fail
+                </td>
+              </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th colspan="6">Large Text</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>AA - 3:1</th>
+                <td id="c1ltAA">
+                  Fail
+                </td>
+                <td id="c2ltAA">
+                  Fail
+                </td>
+                <td id="c3ltAA">
+                  Fail
+                </td>
+                <td id="c4ltAA">
+                  Fail
+                </td>
+                <td id="c5ltAA">
+                  Fail
+                </td>
+              </tr>
+              <tr>
+                <th>AAA - 4.5:1</th>
+                <td id="c1ltAAA">
+                  Fail
+                </td>
+                <td id="c2ltAAA">
+                  Fail
+                </td>
+                <td id="c3ltAAA">
+                  Fail
+                </td>
+                <td id="c4ltAAA">
+                  Fail
+                </td>
+                <td id="c5ltAAA">
+                  Fail
+                </td>
+              </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th colspan="6">Graphical Elements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>AA - 3:1</th>
+                <td id="c1ge">
+                  Fail
+                </td>
+                <td id="c2ge">
+                  Fail
+                </td>
+                <td id="c3ge">
+                  Fail
+                </td>
+                <td id="c4ge">
+                  Fail
+                </td>
+                <td id="c5ge">
+                  Fail
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="themePreview">
+          <h3>Preview</h3>
+          <div id="preview">
+            <h1>Heading</h1>
+            <hr />
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim aliquam accumsan. Praesent quis aliquet lorem. Cras in eleifend tellus. Praesent dolor enim, dapibus sit amet ex semper, dapibus dictum ligula. Aliquam vulputate dui id finibus congue. Donec pharetra gravida est, eget rutrum nulla posuere sit amet. Donec neque nibh, sodales ut finibus vitae, elementum id ante. Duis tincidunt erat erat, nec volutpat nisi pretium vitae.</p>
+            <ul>
+              <li>In mollis fermentum risus, pretium finibus mi.</li>
+              <li>Nulla cursus accumsan sem non eleifend.</li>
+              <li>Etiam in purus at elit venenatis scelerisque.</li>
+            </ul>
+
+<p>Morbi pharetra, nisl ut iaculis fringilla, orci lectus commodo risus, vitae rutrum ipsum nulla ac purus. Suspendisse consequat sapien lacus, at porta purus sodales ac. Fusce euismod ac augue nec consequat. Nunc quis sapien vitae risus laoreet mattis eu ut metus.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+<!-- partial -->
+  <script src='https://cdn.jsdelivr.net/npm/nearest-color@0.4.4/nearestColor.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/node-vibrant@3.1.3/dist/vibrant.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.0.1/color-thief.min.js'></script>
+<script  src="./script.js"></script>
+
+</body>
+</html>
