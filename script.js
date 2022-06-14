@@ -1451,7 +1451,7 @@ function initTheme() {
     
     var c1 = util.getContrast(colors.fg, colors.bg);
     var c2 = util.getContrast(colors.fg, colors.a1);
-    var c3 = util.getContrast(colors.fg, colors.a1);
+    var c3 = util.getContrast(colors.fg, colors.a2);
     var c4 = util.getContrast(colors.a1, colors.bg);
     var c5 = util.getContrast(colors.a2, colors.bg);
     
