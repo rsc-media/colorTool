@@ -225,7 +225,7 @@ input[readonly] {
   display: grid;
   grid-column-gap: 5px;
   grid-row-gap: 5px;
-  grid-template-columns: auto;
+  grid-template-columns: 3fr 64px 2fr;
   grid-template-areas:
     "nearest current palette"
     "conversions conversions palette";
