@@ -1,6 +1,16 @@
+/**
+ * Color Tool
+ * @description Provides an interface to pick color palettes.
+ *
+ * @url https://rsc-media.github.io/colorTool/
+ * @url https://learnatrio.com/ColorTool/
+ *
+ * @url https://www.riolearn.org/content/_resources/interactives/colortool/dist/index.html
+ * @url https://learnatrio.com/RL-ColorTool/
+ */
 // Configurable
 config = {
-  maxImageDim: window.screen.width / 6, // px 
+  maxImageDim: window.screen.width / 6, // px
   initColors: [ "#0c234088", "#ffffffff", "#00ff00ff", "#236192ff" ],
   customColors: [
     { name: "Chandler Gilbert CC Cyan", hex: "#008c95" },
@@ -39,12 +49,12 @@ var tabs = {
 // A list of IDs to find on the page
 var wants = [
   "hex", "hex2", "hex3",
-  "alpha", "alpha2", 
-  "red", "green", "blue", 
-  "hue", "sat", "lum", 
-  "cyn", "mag", "yel", "blk", 
-  "redCB", "greenCB", "blueCB", "alphaCB", 
-  "hueCB", "satCB", "lumCB", "alpha2CB", 
+  "alpha", "alpha2",
+  "red", "green", "blue",
+  "hue", "sat", "lum",
+  "cyn", "mag", "yel", "blk",
+  "redCB", "greenCB", "blueCB", "alphaCB",
+  "hueCB", "satCB", "lumCB", "alpha2CB",
   "cynCB", "magCB", "yelCB", "blkCB",
   "thumbnailDetails", "addToPalette"
 ];
@@ -133,21 +143,21 @@ var util = {
     var m = util.sanitizeDec(magenta) / 100;
     var y = util.sanitizeDec(yellow) / 100;
     var k = util.sanitizeDec(black) / 100;
-    
+
     c = c * (1 - k) + k;
     m = m * (1 - k) + k;
     y = y * (1 - k) + k;
-    
+
     var r = (1 - c) * 255;
     var g = (1 - m) * 255;
     var b = (1 - y) * 255;
-    
+
     if (round) {
       r = Math.round(r);
       g = Math.round(g);
       b = Math.round(b);
     }
-    
+
     return {
       red: r,
       green: g,
@@ -158,7 +168,7 @@ var util = {
     var r = util.sanitizeDec(red) / 255;
     var g = util.sanitizeDec(green) / 255;
     var b = util.sanitizeDec(blue) / 255;
-    
+
     var black = Math.min(1 - r, 1 - g, 1 - b);
     var cyan = black == 1 ? 0 : (1 - r - black) / (1 - black);
     var magenta = black == 1 ? 0 : (1 - g - black) / (1 - black);
@@ -175,7 +185,7 @@ var util = {
     var r = util.pad(util.sanitizeDec(red).toString(16), 2);
     var g = util.pad(util.sanitizeDec(green).toString(16), 2);
     var b = util.pad(util.sanitizeDec(blue).toString(16), 2);
-    
+
     var hex = "#" + r + g + b;
     if (alpha) hex += Math.round(alpha * 255).toString(16);
     return hex;
@@ -339,7 +349,7 @@ var util = {
       case string.startsWith("rgb"):
         var re = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d\.?\d*))?/;
         var found = string.match(re);
-        out = { 
+        out = {
           red: found[1],
           green: found[2],
           blue: found[3],
@@ -378,7 +388,7 @@ function InitUI() {
   getCommonNames();
   UpdateUI(red);
   initTheme();
-  
+
   var inputs = document.querySelectorAll(".tools.pane input:not([type=radio])")
   inputs.forEach(function(input) {
     input.addEventListener("input", function(ev) {
@@ -387,7 +397,7 @@ function InitUI() {
 
       if (ev.srcElement.type == "file") {
         var file = ev.srcElement.files[0];
-        loadFile(file); 
+        loadFile(file);
       } else {
         console.log(ev);
         UpdateUI(ev.srcElement);
@@ -409,7 +419,7 @@ function UpdateUI(src) {
   // Update Inputs
   var target = updateInputs(src);
   var _hex = palette.currentColor.toHexString();
-  
+
   if (target != "hex") {
     // Update Hex values
     hex.value = _hex;
@@ -502,7 +512,7 @@ function updateInputs(src) {
         target = "rgb";
         alpha2.value = alpha.value;
         // Update object
-        palette.currentColor.fromRGB(red.value, green.value, blue.value, alpha.value/100);        
+        palette.currentColor.fromRGB(red.value, green.value, blue.value, alpha.value/100);
         break;
       case hue:
       case sat:
@@ -604,7 +614,7 @@ function updateColorBars(target) {
   alpha2CB.style.background =
     "linear-gradient(to right, hsla(" + hue.value + "," + sat.value + "%," + lum.value + "%, 0, " +  alpha2.value / 100 + "), hsla(" + hue.value + "," + sat.value + "%," + lum.value + "%, 1, " +  alpha2.value / 100 + "))";
   /// CMYK
-  cynCB.style.background = 
+  cynCB.style.background =
     "linear-gradient(to right, "+ util.getRGBStrO(util.CMYKtoRGB(0, mag.value, yel.value, blk.value)) +", "+ util.getRGBStrO(util.CMYKtoRGB(100, mag.value, yel.value, blk.value)) +")";
   magCB.style.background =
     "linear-gradient(to right, "+ util.getRGBStrO(util.CMYKtoRGB(cyn.value, 0, yel.value, blk.value)) +", "+ util.getRGBStrO(util.CMYKtoRGB(cyn.value, 100, yel.value, blk.value)) +")"
@@ -636,9 +646,9 @@ function updateConversions() {
   out += "<span><span class='clickCopy'>" + palette.currentColor.toCMYKstring(alphaEnabled) + "</span></span>";
   out += "<span><span class='clickCopy'>" + palette.currentColor.toCIELABstring(alphaEnabled) + "</span></span>";
   outputs.innerHTML = out;
-  
+
   // Add event listeners
-  initClickCopy(); 
+  initClickCopy();
 }
 function updateFills(hex) {
   hex = hex.replace("#", "");
@@ -652,9 +662,9 @@ function initTabs() {
   tabs.labels = Array.prototype.slice.call(tabs.el.getElementsByTagName("label"));
   tabs.contents = Array.prototype.slice.call(document.getElementsByClassName("tab-content"));
   tabs.contents[0].style.zIndex = 2;
-  
+
   tabs.radios.forEach(function (radio, index) {
-      
+
     tabs.el.querySelector("div[data-tabs=" + radio.id +"]");
     radio.content = tabs.contents.find(function (content) {
       var target = content.getAttribute("data-tab")
@@ -698,7 +708,7 @@ function Color() {
       }
     });
   };
-  
+
   this.fromHex = function(hex) {
     // Convert Hex to RGB
     var rgb = util.HextoRGB(hex);
@@ -711,7 +721,7 @@ function Color() {
     this.red = rgb.red;
     this.green = rgb.green;
     this.blue = rgb.blue;
-    
+
   };
   this.fromRGB = function(red, green, blue, alpha) {
     // Fire Change event
@@ -773,7 +783,7 @@ function Color() {
     var hue = hsl.hue === 0 ? 0 : hsl.hue;
     var sat = hsl.sat === 0 ? 0 : hsl.sat + "%";
     var lum = hsl.lum === 0 ? 0 : hsl.lum + "%";
-    
+
     var out = (alphaEnabled) ? "hsla(" : "hsl(";
     out += hue + ", " + sat + ", " + lum;
     if (alphaEnabled) {
@@ -784,11 +794,11 @@ function Color() {
   };
   this.toHexString = function(alphaEnabled) {
     if (typeof alphaEnabled == "undefined") alphaEnable = false;
-    return (alphaEnabled) 
-      ? util.RGBtoHex(this.red, this.green, this.blue, this.alpha) 
+    return (alphaEnabled)
+      ? util.RGBtoHex(this.red, this.green, this.blue, this.alpha)
       : util.RGBtoHex(this.red, this.green, this.blue);;
   };
-  this.toCMYK = function() { 
+  this.toCMYK = function() {
     return util.RGBtoCMYK(this.red, this.green, this.blue);
   };
   this.toCMYKstring = function() {
@@ -817,7 +827,7 @@ function initPalette() {
     rgb.alpha = 1;
     var swatch = document.createElement("div");
     swatch.classList.add("swatch");
-   
+
     swatch.fill = document.createElement("div");
     swatch.appendChild(swatch.fill);
 
@@ -829,17 +839,17 @@ function initPalette() {
 
     p.swatches.push(swatch);
     p.fills.push(swatch.fill);
-    
+
     addToPalette.parentElement.insertBefore(swatch, addToPalette);
-    
+
     swatch.fill.addEventListener("click", handleFillClick);
   };
-  
+
   // Build Swatches from Init Colors
   config.initColors.forEach(function(color) {
     var rgb = util.HextoRGB(color);
     p.addSwatch(rgb);
-    
+
   });
   p.currentColor.fromHex(config.initColors[0]);
   alpha.value = 100;
@@ -849,8 +859,8 @@ function initPalette() {
   // console.log (p)
   // Set active color
   p.activeIndex = 1;
-  p.swatches[1].classList.add("active"); 
-  
+  p.swatches[1].classList.add("active");
+
   var timeout;
   p.currentColor.on("change",function(ev) {
     clearTimeout(timeout);
@@ -878,13 +888,13 @@ function handleFillClick(ev) {
 
   var swatch = ev.srcElement.parentElement;
   ev.color = ev.srcElement.style.backgroundColor;
-  
+
   // Clear current active
   palette.swatches[palette.activeIndex].classList.remove("active");
-  
+
   // Set new active
   swatch.classList.add("active");
-  
+
   // Find index in siblings for new active
   var child = 1, cur = swatch;
   while (cur.previousElementSibling) {
@@ -892,16 +902,16 @@ function handleFillClick(ev) {
     child++;
   }
   console.log("Swatch " + child + " was clicked with color: " + ev.color);
-  
+
   // Update active index
   palette.activeIndex = child;
-  
+
   // Update active Color
   var rgb = util.stringToRGB(swatch.fill.style.backgroundColor);
   palette.currentColor.fromRGB(rgb.red, rgb.green, rgb.blue, rgb.alpha);
   var _hex = palette.currentColor.toHexString();
   updateFills(_hex);
-  
+
   // Update UI
   // hex.value = hex2.value = hex3.value = "#" + _hex;
   // UpdateUI(hex);
@@ -915,7 +925,7 @@ function handleFillClick(ev) {
 // Color Name stuff
 function getNamedColors() {
   var colors = {};
-  
+
   colors.html = htmlColors = [
     { hex: "#FFC0CB", name: "Pink", cat: "Pinks", red: 255, green: 192, blue: 203},
     { hex: "#FFB6C1", name: "LightPink", cat: "Pinks", red: 255, green: 182, blue: 193},
@@ -1059,138 +1069,138 @@ function getNamedColors() {
     { hex: "#000000", name: "Black", cat: "Blacks", red: 0, green: 0, blue: 0},
   ];
   colors.crayola = [
-    { hex: "#EFDECD", name: "Almond", red: 239, green: 222, blue: 205 }, 
-    { hex: "#CD9575", name: "Antique Brass", red: 205, green: 149, blue: 117 }, 
-    { hex: "#FDD9B5", name: "Apricot", red: 253, green: 217, blue: 181 }, 
-    { hex: "#78DBE2", name: "Aquamarine", red: 120, green: 219, blue: 226 }, 
-    { hex: "#87A96B", name: "Asparagus", red: 135, green: 169, blue: 107 }, 
-    { hex: "#FFA474", name: "Atomic Tangerine", red: 255, green: 164, blue: 116 }, 
-    { hex: "#FAE7B5", name: "Banana Mania", red: 250, green: 231, blue: 181 }, 
-    { hex: "#9F8170", name: "Beaver", red: 159, green: 129, blue: 112 }, 
-    { hex: "#FD7C6E", name: "Bittersweet", red: 253, green: 124, blue: 110 }, 
-    { hex: "#000000", name: "Black", red: 0, green: 0, blue: 0 }, 
-    { hex: "#ACE5EE", name: "Blizzard Blue", red: 172, green: 229, blue: 238 }, 
-    { hex: "#1F75FE", name: "Blue", red: 31, green: 117, blue: 254 }, 
-    { hex: "#A2A2D0", name: "Blue Bell", red: 162, green: 162, blue: 208 }, 
-    { hex: "#6699CC", name: "Blue Gray", red: 102, green: 153, blue: 204 }, 
-    { hex: "#0D98BA", name: "Blue Green", red: 13, green: 152, blue: 186 }, 
-    { hex: "#7366BD", name: "Blue Violet", red: 115, green: 102, blue: 189 }, 
-    { hex: "#DE5D83", name: "Blush", red: 222, green: 93, blue: 131 }, 
-    { hex: "#CB4154", name: "Brick Red", red: 203, green: 65, blue: 84 }, 
-    { hex: "#B4674D", name: "Brown", red: 180, green: 103, blue: 77 }, 
-    { hex: "#FF7F49", name: "Burnt Orange", red: 255, green: 127, blue: 73 }, 
-    { hex: "#EA7E5D", name: "Burnt Sienna", red: 234, green: 126, blue: 93 }, 
-    { hex: "#B0B7C6", name: "Cadet Blue", red: 176, green: 183, blue: 198 }, 
-    { hex: "#FFFF99", name: "Canary", red: 255, green: 255, blue: 153 }, 
-    { hex: "#1CD3A2", name: "Caribbean Green", red: 28, green: 211, blue: 162 }, 
-    { hex: "#FFAACC", name: "Carnation Pink", red: 255, green: 170, blue: 204 }, 
-    { hex: "#DD4492", name: "Cerise", red: 221, green: 68, blue: 146 }, 
-    { hex: "#1DACD6", name: "Cerulean", red: 29, green: 172, blue: 214 }, 
-    { hex: "#BC5D58", name: "Chestnut", red: 188, green: 93, blue: 88 }, 
-    { hex: "#DD9475", name: "Copper", red: 221, green: 148, blue: 117 }, 
-    { hex: "#9ACEEB", name: "Cornflower", red: 154, green: 206, blue: 235 }, 
-    { hex: "#FFBCD9", name: "Cotton Candy", red: 255, green: 188, blue: 217 }, 
-    { hex: "#FDDB6D", name: "Dandelion", red: 253, green: 219, blue: 109 }, 
-    { hex: "#2B6CC4", name: "Denim", red: 43, green: 108, blue: 196 }, 
-    { hex: "#EFCDB8", name: "Desert Sand", red: 239, green: 205, blue: 184 }, 
-    { hex: "#6E5160", name: "Eggplant", red: 110, green: 81, blue: 96 }, 
-    { hex: "#CEFF1D", name: "Electric Lime", red: 206, green: 255, blue: 29 }, 
-    { hex: "#71BC78", name: "Fern", red: 113, green: 188, blue: 120 }, 
-    { hex: "#6DAE81", name: "Forest Green", red: 109, green: 174, blue: 129 }, 
-    { hex: "#C364C5", name: "Fuchsia", red: 195, green: 100, blue: 197 }, 
-    { hex: "#CC6666", name: "Fuzzy Wuzzy", red: 204, green: 102, blue: 102 }, 
-    { hex: "#E7C697", name: "Gold", red: 231, green: 198, blue: 151 }, 
-    { hex: "#FCD975", name: "Goldenrod", red: 252, green: 217, blue: 117 }, 
-    { hex: "#A8E4A0", name: "Granny Smith Apple", red: 168, green: 228, blue: 160 }, 
-    { hex: "#95918C", name: "Gray", red: 149, green: 145, blue: 140 }, 
-    { hex: "#1CAC78", name: "Green", red: 28, green: 172, blue: 120 }, 
-    { hex: "#1164B4", name: "Green Blue", red: 17, green: 100, blue: 180 }, 
-    { hex: "#F0E891", name: "Green Yellow", red: 240, green: 232, blue: 145 }, 
-    { hex: "#FF1DCE", name: "Hot Magenta", red: 255, green: 29, blue: 206 }, 
-    { hex: "#B2EC5D", name: "Inchworm", red: 178, green: 236, blue: 93 }, 
-    { hex: "#5D76CB", name: "Indigo", red: 93, green: 118, blue: 203 }, 
-    { hex: "#CA3767", name: "Jazzberry Jam", red: 202, green: 55, blue: 103 }, 
-    { hex: "#3BB08F", name: "Jungle Green", red: 59, green: 176, blue: 143 }, 
+    { hex: "#EFDECD", name: "Almond", red: 239, green: 222, blue: 205 },
+    { hex: "#CD9575", name: "Antique Brass", red: 205, green: 149, blue: 117 },
+    { hex: "#FDD9B5", name: "Apricot", red: 253, green: 217, blue: 181 },
+    { hex: "#78DBE2", name: "Aquamarine", red: 120, green: 219, blue: 226 },
+    { hex: "#87A96B", name: "Asparagus", red: 135, green: 169, blue: 107 },
+    { hex: "#FFA474", name: "Atomic Tangerine", red: 255, green: 164, blue: 116 },
+    { hex: "#FAE7B5", name: "Banana Mania", red: 250, green: 231, blue: 181 },
+    { hex: "#9F8170", name: "Beaver", red: 159, green: 129, blue: 112 },
+    { hex: "#FD7C6E", name: "Bittersweet", red: 253, green: 124, blue: 110 },
+    { hex: "#000000", name: "Black", red: 0, green: 0, blue: 0 },
+    { hex: "#ACE5EE", name: "Blizzard Blue", red: 172, green: 229, blue: 238 },
+    { hex: "#1F75FE", name: "Blue", red: 31, green: 117, blue: 254 },
+    { hex: "#A2A2D0", name: "Blue Bell", red: 162, green: 162, blue: 208 },
+    { hex: "#6699CC", name: "Blue Gray", red: 102, green: 153, blue: 204 },
+    { hex: "#0D98BA", name: "Blue Green", red: 13, green: 152, blue: 186 },
+    { hex: "#7366BD", name: "Blue Violet", red: 115, green: 102, blue: 189 },
+    { hex: "#DE5D83", name: "Blush", red: 222, green: 93, blue: 131 },
+    { hex: "#CB4154", name: "Brick Red", red: 203, green: 65, blue: 84 },
+    { hex: "#B4674D", name: "Brown", red: 180, green: 103, blue: 77 },
+    { hex: "#FF7F49", name: "Burnt Orange", red: 255, green: 127, blue: 73 },
+    { hex: "#EA7E5D", name: "Burnt Sienna", red: 234, green: 126, blue: 93 },
+    { hex: "#B0B7C6", name: "Cadet Blue", red: 176, green: 183, blue: 198 },
+    { hex: "#FFFF99", name: "Canary", red: 255, green: 255, blue: 153 },
+    { hex: "#1CD3A2", name: "Caribbean Green", red: 28, green: 211, blue: 162 },
+    { hex: "#FFAACC", name: "Carnation Pink", red: 255, green: 170, blue: 204 },
+    { hex: "#DD4492", name: "Cerise", red: 221, green: 68, blue: 146 },
+    { hex: "#1DACD6", name: "Cerulean", red: 29, green: 172, blue: 214 },
+    { hex: "#BC5D58", name: "Chestnut", red: 188, green: 93, blue: 88 },
+    { hex: "#DD9475", name: "Copper", red: 221, green: 148, blue: 117 },
+    { hex: "#9ACEEB", name: "Cornflower", red: 154, green: 206, blue: 235 },
+    { hex: "#FFBCD9", name: "Cotton Candy", red: 255, green: 188, blue: 217 },
+    { hex: "#FDDB6D", name: "Dandelion", red: 253, green: 219, blue: 109 },
+    { hex: "#2B6CC4", name: "Denim", red: 43, green: 108, blue: 196 },
+    { hex: "#EFCDB8", name: "Desert Sand", red: 239, green: 205, blue: 184 },
+    { hex: "#6E5160", name: "Eggplant", red: 110, green: 81, blue: 96 },
+    { hex: "#CEFF1D", name: "Electric Lime", red: 206, green: 255, blue: 29 },
+    { hex: "#71BC78", name: "Fern", red: 113, green: 188, blue: 120 },
+    { hex: "#6DAE81", name: "Forest Green", red: 109, green: 174, blue: 129 },
+    { hex: "#C364C5", name: "Fuchsia", red: 195, green: 100, blue: 197 },
+    { hex: "#CC6666", name: "Fuzzy Wuzzy", red: 204, green: 102, blue: 102 },
+    { hex: "#E7C697", name: "Gold", red: 231, green: 198, blue: 151 },
+    { hex: "#FCD975", name: "Goldenrod", red: 252, green: 217, blue: 117 },
+    { hex: "#A8E4A0", name: "Granny Smith Apple", red: 168, green: 228, blue: 160 },
+    { hex: "#95918C", name: "Gray", red: 149, green: 145, blue: 140 },
+    { hex: "#1CAC78", name: "Green", red: 28, green: 172, blue: 120 },
+    { hex: "#1164B4", name: "Green Blue", red: 17, green: 100, blue: 180 },
+    { hex: "#F0E891", name: "Green Yellow", red: 240, green: 232, blue: 145 },
+    { hex: "#FF1DCE", name: "Hot Magenta", red: 255, green: 29, blue: 206 },
+    { hex: "#B2EC5D", name: "Inchworm", red: 178, green: 236, blue: 93 },
+    { hex: "#5D76CB", name: "Indigo", red: 93, green: 118, blue: 203 },
+    { hex: "#CA3767", name: "Jazzberry Jam", red: 202, green: 55, blue: 103 },
+    { hex: "#3BB08F", name: "Jungle Green", red: 59, green: 176, blue: 143 },
     { hex: "#FEFE22", name: "Laser Lemon", red: 254, green: 254, blue: 34 },
     { hex: "#FCB4D5", name: "Lavender", red: 252, green: 180, blue: 213 },
     { hex: "#FFF44F", name: "Lemon Yellow", red: 255, green: 244, blue: 79 },
     { hex: "#FFBD88", name: "Macaroni and Cheese", red: 255, green: 189, blue: 136 },
     { hex: "#F664AF", name: "Magenta", red: 246, green: 100, blue: 175 },
     { hex: "#AAF0D1", name: "Magic Mint", red: 170, green: 240, blue: 209 },
-    { hex: "#CD4A4C", name: "Mahogany", red: 205, green: 74, blue: 76 }, 
-    { hex: "#EDD19C", name: "Maize", red: 237, green: 209, blue: 156 }, 
-    { hex: "#979AAA", name: "Manatee", red: 151, green: 154, blue: 170 }, 
-    { hex: "#FF8243", name: "Mango Tango", red: 255, green: 130, blue: 67 }, 
-    { hex: "#C8385A", name: "Maroon", red: 200, green: 56, blue: 90 }, 
-    { hex: "#EF98AA", name: "Mauvelous", red: 239, green: 152, blue: 170 }, 
-    { hex: "#FDBCB4", name: "Melon", red: 253, green: 188, blue: 180 }, 
-    { hex: "#1A4876", name: "Midnight Blue", red: 26, green: 72, blue: 118 }, 
-    { hex: "#30BA8F", name: "Mountain Meadow", red: 48, green: 186, blue: 143 }, 
-    { hex: "#C54B8C", name: "Mulberry", red: 197, green: 75, blue: 140 }, 
-    { hex: "#1974D2", name: "Navy Blue", red: 25, green: 116, blue: 210 }, 
-    { hex: "#FFA343", name: "Neon Carrot", red: 255, green: 163, blue: 67 }, 
-    { hex: "#BAB86C", name: "Olive Green", red: 186, green: 184, blue: 108 }, 
-    { hex: "#FF7538", name: "Orange", red: 255, green: 117, blue: 56 }, 
-    { hex: "#FF2B2B", name: "Orange Red", red: 255, green: 43, blue: 43 }, 
-    { hex: "#F8D568", name: "Orange Yellow", red: 248, green: 213, blue: 104 }, 
-    { hex: "#E6A8D7", name: "Orchid", red: 230, green: 168, blue: 215 }, 
-    { hex: "#414A4C", name: "Outer Space", red: 65, green: 74, blue: 76 }, 
-    { hex: "#FF6E4A", name: "Outrageous Orange", red: 255, green: 110, blue: 74 }, 
-    { hex: "#1CA9C9", name: "Pacific Blue", red: 28, green: 169, blue: 201 }, 
-    { hex: "#FFCFAB", name: "Peach", red: 255, green: 207, blue: 171 }, 
-    { hex: "#C5D0E6", name: "Periwinkle", red: 197, green: 208, blue: 230 }, 
-    { hex: "#FDDDE6", name: "Piggy Pink", red: 253, green: 221, blue: 230 }, 
-    { hex: "#158078", name: "Pine Green", red: 21, green: 128, blue: 120 }, 
-    { hex: "#FC74FD", name: "Pink Flamingo", red: 252, green: 116, blue: 253 }, 
-    { hex: "#F78FA7", name: "Pink Sherbet", red: 247, green: 143, blue: 167 }, 
-    { hex: "#8E4585", name: "Plum", red: 142, green: 69, blue: 133 }, 
-    { hex: "#7442C8", name: "Purple Heart", red: 116, green: 66, blue: 200 }, 
-    { hex: "#9D81BA", name: "Purple Mountain's Majesty", red: 157, green: 129, blue: 186 }, 
-    { hex: "#FE4EDA", name: "Purple Pizzazz", red: 254, green: 78, blue: 218 }, 
-    { hex: "#FF496C", name: "Radical Red", red: 255, green: 73, blue: 108 }, 
-    { hex: "#D68A59", name: "Raw Sienna", red: 214, green: 138, blue: 89 }, 
-    { hex: "#714B23", name: "Raw Umber", red: 113, green: 75, blue: 35 }, 
-    { hex: "#FF48D0", name: "Razzle Dazzle Rose", red: 255, green: 72, blue: 208 }, 
-    { hex: "#E3256B", name: "Razzmatazz", red: 227, green: 37, blue: 107 }, 
-    { hex: "#EE204D", name: "Red", red: 238, green: 32, blue: 77 }, 
-    { hex: "#FF5349", name: "Red Orange", red: 255, green: 83, blue: 73 }, 
-    { hex: "#C0448F", name: "Red Violet", red: 192, green: 68, blue: 143 }, 
-    { hex: "#1FCECB", name: "Robin's Egg Blue", red: 31, green: 206, blue: 203 }, 
-    { hex: "#7851A9", name: "Royal Purple", red: 120, green: 81, blue: 169 }, 
-    { hex: "#FF9BAA", name: "Salmon", red: 255, green: 155, blue: 170 }, 
-    { hex: "#FC2847", name: "Scarlet", red: 252, green: 40, blue: 71 }, 
-    { hex: "#76FF7A", name: "Screamin' Green", red: 118, green: 255, blue: 122 }, 
-    { hex: "#9FE2BF", name: "Sea Green", red: 159, green: 226, blue: 191 }, 
-    { hex: "#A5694F", name: "Sepia", red: 165, green: 105, blue: 79 }, 
-    { hex: "#8A795D", name: "Shadow", red: 138, green: 121, blue: 93 }, 
-    { hex: "#45CEA2", name: "Shamrock", red: 69, green: 206, blue: 162 }, 
-    { hex: "#FB7EFD", name: "Shocking Pink", red: 251, green: 126, blue: 253 }, 
-    { hex: "#CDC5C2", name: "Silver", red: 205, green: 197, blue: 194 }, 
-    { hex: "#80DAEB", name: "Sky Blue", red: 128, green: 218, blue: 235 }, 
-    { hex: "#ECEABE", name: "Spring Green", red: 236, green: 234, blue: 190 }, 
-    { hex: "#FFCF48", name: "Sunglow", red: 255, green: 207, blue: 72 }, 
-    { hex: "#FD5E53", name: "Sunset Orange", red: 253, green: 94, blue: 83 }, 
-    { hex: "#FAA76C", name: "Tan", red: 250, green: 167, blue: 108 }, 
-    { hex: "#18A7B5", name: "Teal Blue", red: 24, green: 167, blue: 181 }, 
-    { hex: "#EBC7DF", name: "Thistle", red: 235, green: 199, blue: 223 }, 
-    { hex: "#FC89AC", name: "Tickle Me Pink", red: 252, green: 137, blue: 172 }, 
-    { hex: "#DBD7D2", name: "Timberwolf", red: 219, green: 215, blue: 210 }, 
-    { hex: "#17806D", name: "Tropical Rain Forest", red: 23, green: 128, blue: 109 }, 
-    { hex: "#DEAA88", name: "Tumbleweed", red: 222, green: 170, blue: 136 }, 
-    { hex: "#77DDE7", name: "Turquoise Blue", red: 119, green: 221, blue: 231 }, 
-    { hex: "#FFFF66", name: "Unmellow Yellow", red: 255, green: 255, blue: 102 }, 
-    { hex: "#926EAE", name: "Violet (Purple)", red: 146, green: 110, blue: 174 }, 
-    { hex: "#324AB2", name: "Violet Blue", red: 50, green: 74, blue: 178 }, 
-    { hex: "#F75394", name: "Violet Red", red: 247, green: 83, blue: 148 }, 
-    { hex: "#FFA089", name: "Vivid Tangerine", red: 255, green: 160, blue: 137 }, 
-    { hex: "#8F509D", name: "Vivid Violet", red: 143, green: 80, blue: 157 }, 
-    { hex: "#FFFFFF", name: "White", red: 255, green: 255, blue: 255 }, 
-    { hex: "#A2ADD0", name: "Wild Blue Yonder", red: 162, green: 173, blue: 208 }, 
-    { hex: "#FF43A4", name: "Wild Strawberry", red: 255, green: 67, blue: 164 }, 
-    { hex: "#FC6C85", name: "Wild Watermelon", red: 252, green: 108, blue: 133 }, 
-    { hex: "#CDA4DE", name: "Wisteria", red: 205, green: 164, blue: 222 }, 
-    { hex: "#FCE883", name: "Yellow", red: 252, green: 232, blue: 131 }, 
-    { hex: "#C5E384", name: "Yellow Green", red: 197, green: 227, blue: 132 }, 
+    { hex: "#CD4A4C", name: "Mahogany", red: 205, green: 74, blue: 76 },
+    { hex: "#EDD19C", name: "Maize", red: 237, green: 209, blue: 156 },
+    { hex: "#979AAA", name: "Manatee", red: 151, green: 154, blue: 170 },
+    { hex: "#FF8243", name: "Mango Tango", red: 255, green: 130, blue: 67 },
+    { hex: "#C8385A", name: "Maroon", red: 200, green: 56, blue: 90 },
+    { hex: "#EF98AA", name: "Mauvelous", red: 239, green: 152, blue: 170 },
+    { hex: "#FDBCB4", name: "Melon", red: 253, green: 188, blue: 180 },
+    { hex: "#1A4876", name: "Midnight Blue", red: 26, green: 72, blue: 118 },
+    { hex: "#30BA8F", name: "Mountain Meadow", red: 48, green: 186, blue: 143 },
+    { hex: "#C54B8C", name: "Mulberry", red: 197, green: 75, blue: 140 },
+    { hex: "#1974D2", name: "Navy Blue", red: 25, green: 116, blue: 210 },
+    { hex: "#FFA343", name: "Neon Carrot", red: 255, green: 163, blue: 67 },
+    { hex: "#BAB86C", name: "Olive Green", red: 186, green: 184, blue: 108 },
+    { hex: "#FF7538", name: "Orange", red: 255, green: 117, blue: 56 },
+    { hex: "#FF2B2B", name: "Orange Red", red: 255, green: 43, blue: 43 },
+    { hex: "#F8D568", name: "Orange Yellow", red: 248, green: 213, blue: 104 },
+    { hex: "#E6A8D7", name: "Orchid", red: 230, green: 168, blue: 215 },
+    { hex: "#414A4C", name: "Outer Space", red: 65, green: 74, blue: 76 },
+    { hex: "#FF6E4A", name: "Outrageous Orange", red: 255, green: 110, blue: 74 },
+    { hex: "#1CA9C9", name: "Pacific Blue", red: 28, green: 169, blue: 201 },
+    { hex: "#FFCFAB", name: "Peach", red: 255, green: 207, blue: 171 },
+    { hex: "#C5D0E6", name: "Periwinkle", red: 197, green: 208, blue: 230 },
+    { hex: "#FDDDE6", name: "Piggy Pink", red: 253, green: 221, blue: 230 },
+    { hex: "#158078", name: "Pine Green", red: 21, green: 128, blue: 120 },
+    { hex: "#FC74FD", name: "Pink Flamingo", red: 252, green: 116, blue: 253 },
+    { hex: "#F78FA7", name: "Pink Sherbet", red: 247, green: 143, blue: 167 },
+    { hex: "#8E4585", name: "Plum", red: 142, green: 69, blue: 133 },
+    { hex: "#7442C8", name: "Purple Heart", red: 116, green: 66, blue: 200 },
+    { hex: "#9D81BA", name: "Purple Mountain's Majesty", red: 157, green: 129, blue: 186 },
+    { hex: "#FE4EDA", name: "Purple Pizzazz", red: 254, green: 78, blue: 218 },
+    { hex: "#FF496C", name: "Radical Red", red: 255, green: 73, blue: 108 },
+    { hex: "#D68A59", name: "Raw Sienna", red: 214, green: 138, blue: 89 },
+    { hex: "#714B23", name: "Raw Umber", red: 113, green: 75, blue: 35 },
+    { hex: "#FF48D0", name: "Razzle Dazzle Rose", red: 255, green: 72, blue: 208 },
+    { hex: "#E3256B", name: "Razzmatazz", red: 227, green: 37, blue: 107 },
+    { hex: "#EE204D", name: "Red", red: 238, green: 32, blue: 77 },
+    { hex: "#FF5349", name: "Red Orange", red: 255, green: 83, blue: 73 },
+    { hex: "#C0448F", name: "Red Violet", red: 192, green: 68, blue: 143 },
+    { hex: "#1FCECB", name: "Robin's Egg Blue", red: 31, green: 206, blue: 203 },
+    { hex: "#7851A9", name: "Royal Purple", red: 120, green: 81, blue: 169 },
+    { hex: "#FF9BAA", name: "Salmon", red: 255, green: 155, blue: 170 },
+    { hex: "#FC2847", name: "Scarlet", red: 252, green: 40, blue: 71 },
+    { hex: "#76FF7A", name: "Screamin' Green", red: 118, green: 255, blue: 122 },
+    { hex: "#9FE2BF", name: "Sea Green", red: 159, green: 226, blue: 191 },
+    { hex: "#A5694F", name: "Sepia", red: 165, green: 105, blue: 79 },
+    { hex: "#8A795D", name: "Shadow", red: 138, green: 121, blue: 93 },
+    { hex: "#45CEA2", name: "Shamrock", red: 69, green: 206, blue: 162 },
+    { hex: "#FB7EFD", name: "Shocking Pink", red: 251, green: 126, blue: 253 },
+    { hex: "#CDC5C2", name: "Silver", red: 205, green: 197, blue: 194 },
+    { hex: "#80DAEB", name: "Sky Blue", red: 128, green: 218, blue: 235 },
+    { hex: "#ECEABE", name: "Spring Green", red: 236, green: 234, blue: 190 },
+    { hex: "#FFCF48", name: "Sunglow", red: 255, green: 207, blue: 72 },
+    { hex: "#FD5E53", name: "Sunset Orange", red: 253, green: 94, blue: 83 },
+    { hex: "#FAA76C", name: "Tan", red: 250, green: 167, blue: 108 },
+    { hex: "#18A7B5", name: "Teal Blue", red: 24, green: 167, blue: 181 },
+    { hex: "#EBC7DF", name: "Thistle", red: 235, green: 199, blue: 223 },
+    { hex: "#FC89AC", name: "Tickle Me Pink", red: 252, green: 137, blue: 172 },
+    { hex: "#DBD7D2", name: "Timberwolf", red: 219, green: 215, blue: 210 },
+    { hex: "#17806D", name: "Tropical Rain Forest", red: 23, green: 128, blue: 109 },
+    { hex: "#DEAA88", name: "Tumbleweed", red: 222, green: 170, blue: 136 },
+    { hex: "#77DDE7", name: "Turquoise Blue", red: 119, green: 221, blue: 231 },
+    { hex: "#FFFF66", name: "Unmellow Yellow", red: 255, green: 255, blue: 102 },
+    { hex: "#926EAE", name: "Violet (Purple)", red: 146, green: 110, blue: 174 },
+    { hex: "#324AB2", name: "Violet Blue", red: 50, green: 74, blue: 178 },
+    { hex: "#F75394", name: "Violet Red", red: 247, green: 83, blue: 148 },
+    { hex: "#FFA089", name: "Vivid Tangerine", red: 255, green: 160, blue: 137 },
+    { hex: "#8F509D", name: "Vivid Violet", red: 143, green: 80, blue: 157 },
+    { hex: "#FFFFFF", name: "White", red: 255, green: 255, blue: 255 },
+    { hex: "#A2ADD0", name: "Wild Blue Yonder", red: 162, green: 173, blue: 208 },
+    { hex: "#FF43A4", name: "Wild Strawberry", red: 255, green: 67, blue: 164 },
+    { hex: "#FC6C85", name: "Wild Watermelon", red: 252, green: 108, blue: 133 },
+    { hex: "#CDA4DE", name: "Wisteria", red: 205, green: 164, blue: 222 },
+    { hex: "#FCE883", name: "Yellow", red: 252, green: 232, blue: 131 },
+    { hex: "#C5E384", name: "Yellow Green", red: 197, green: 227, blue: 132 },
     { hex: "#FFAE42", name: "Yellow Orange", red: 255, green: 174, blue: 66 }
   ];
 
@@ -1199,10 +1209,10 @@ function getNamedColors() {
     return Object.assign(acc, o);
   };
   colors.nearest = {
-    html: nearestColor.from( 
-      colors.html.reduce(colors.reducer, {}) 
+    html: nearestColor.from(
+      colors.html.reduce(colors.reducer, {})
     ),
-    crayola: nearestColor.from( 
+    crayola: nearestColor.from(
       colors.crayola.reduce(colors.reducer, {})
     )
   };
@@ -1211,13 +1221,13 @@ function getNamedColors() {
 function getCommonNames() {
   var xhr = new XMLHttpRequest()
   var colors = [];
-  
+
   xhr.onload = function () {
     if (xhr.status >= 200 && xhr.status < 300) {
       namedColors.common = JSON.parse(xhr.response);
       namedColors.common = namedColors.common.concat(config.customColors);
-      namedColors.nearest.common = nearestColor.from( 
-        namedColors.common.reduce((o, { name, hex }) => Object.assign(o, { [name]: hex }), {}) 
+      namedColors.nearest.common = nearestColor.from(
+        namedColors.common.reduce((o, { name, hex }) => Object.assign(o, { [name]: hex }), {})
       );
       UpdateUI(red);
       updateConversions();
@@ -1225,7 +1235,7 @@ function getCommonNames() {
       console.log('The request failed!');
     }
   }
-  
+
   xhr.open('GET', 'https://unpkg.com/color-name-list@4.8.0/dist/colornames.json');
   xhr.send();
 }
@@ -1297,36 +1307,36 @@ function loadFile(file) {
       ctPalette.forEach(function(swatch, index) {
         out += "<label>Other " + (index+1) + "</label>";
         out += "<div class='swatch'><div class='fill' style='background-color:rgb("+ swatch[0] +", "+ swatch[1] +", "+ swatch[2] +")'>&nbsp;</div></div>";
-        // return { red: swatch[0], green: swatch[1], blue: swatch[2], 
+        // return { red: swatch[0], green: swatch[1], blue: swatch[2],
         //         string: "rgb("+ swatch[0] +", "+ swatch[1] +", "+ swatch[2] +")" }
       })
-      
-      // 
+
+      //
       thumbnailDetails.addEventListener("click", function(ev) {
         if (ev.srcElement) {
-          palette.addSwatch(util.stringToRGB(ev.srcElement.style.backgroundColor));  
+          palette.addSwatch(util.stringToRGB(ev.srcElement.style.backgroundColor));
         }
       });
-      
+
       // console.log(ctPalette);
       var dw = 0, dh = 0;
       // Resize image to fit
       var max = config.maxImageDim;
-      if ((image.width > max) || (image.height > max)) { 
-        var ratio = (image.width > image.height) 
-          ? (max / image.width) 
+      if ((image.width > max) || (image.height > max)) {
+        var ratio = (image.width > image.height)
+          ? (max / image.width)
           : (max / image.height);
-        dw = parseInt(image.width * ratio); 
-        dh = parseInt(image.height * ratio); 
+        dw = parseInt(image.width * ratio);
+        dh = parseInt(image.height * ratio);
 
-        canvas.width = dw; 
-        canvas.height = dh; 
+        canvas.width = dw;
+        canvas.height = dh;
       } else {
-        canvas.width = image.width; 
-        canvas.height = image.height; 
+        canvas.width = image.width;
+        canvas.height = image.height;
       }
       // Draw out the treated image
-      ctx.drawImage(image, 0, 0, dw, dh); 
+      ctx.drawImage(image, 0, 0, dw, dh);
     });
     image.src = e.target.result;
   };
@@ -1358,9 +1368,9 @@ function handleHover(ev) {
     var x = parseInt(ev.offsetX);
     var y = parseInt(ev.offsetY);
     var imgData = canvas.getContext("2d").getImageData(x, y, 1, 1);
-    
+
     // console.log("Offset: " + x + " x " + y);
-    
+
     var rgba = {
       red:   imgData.data[0],
       green: imgData.data[1],
@@ -1380,7 +1390,7 @@ function initClickCopy() {
     // console.log(el);
     el.setAttribute("data-content", "Click to copy");
     el.addEventListener("click", handleClick);
-    
+
     function handleClick(ev) {
       var el = ev.srcElement;
       copyToClipboard(el.innerText);
@@ -1432,29 +1442,29 @@ function initTheme() {
     updatePreview();
     updateContrast();
   }
-  
+
   function updatePreview() {
     var preview = document.getElementById("preview");
     var h1 = preview.getElementsByTagName("H1")[0];
     var hr = preview.getElementsByTagName("HR")[0];
-    
+
     preview.style.color = colors.fg;
     preview.style.backgroundColor = colors.bg;
     preview.style.borderColor = colors.a1;
     hr.style.color = colors.a2;
     hr.style.backgroundColor = colors.a2;
   }
-  
+
   function updateContrast() {
     var wrapper = document.getElementById("contrast");
     var table = document.getElementById("contrastTable");
-    
+
     var c1 = util.getContrast(colors.fg, colors.bg);
     var c2 = util.getContrast(colors.fg, colors.a1);
     var c3 = util.getContrast(colors.fg, colors.a2);
     var c4 = util.getContrast(colors.a1, colors.bg);
     var c5 = util.getContrast(colors.a2, colors.bg);
-    
+
     var c1Cell = table.querySelector("#contrastTable > tbody > tr:nth-child(1) > td:nth-child(2)");
     var c2Cell = table.querySelector("#contrastTable > tbody > tr:nth-child(1) > td:nth-child(3)");
     var c3Cell = table.querySelector("#contrastTable > tbody > tr:nth-child(1) > td:nth-child(4)");
@@ -1504,7 +1514,7 @@ function initTheme() {
       c5ltAAA: document.getElementById("c5ltAAA"),
       c5ge: document.getElementById("c5ge"),
     }
-    
+
     for (var i = 1; i <= 5; i++) {
       var ntAA = els["c"+i+"ntAA"];
       var ntAAA = els["c"+i+"ntAAA"];
@@ -1515,7 +1525,7 @@ function initTheme() {
       // Set messages
       var passMsg = "Pass";
       var failMsg = "Fail";
-      
+
       function formatMsg(msg) {
         var icon = (msg == passMsg) ? "check" : "times";
         return "<span class=\"" + msg.toLowerCase() + "\"><i class=\"fas fa-" + icon + "\"></i> " + msg + "</span>";
